@@ -176,89 +176,22 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-(function () {
-  "use strict";
-
   const SUPABASE_URL = "https://hpgsvoiovfsejxtwiizg.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3N2b2lvdmZzZWp4dHdpaXpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1ODA4NDYsImV4cCI6MjEwNTE1Njg0Nn0.dEvkH_lY0sKB3TEcRumAFtgmP5pHLwLl1ImY58VoAdg";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  let supabase = null;
-  let mode = "login";
+  let mode = "login"; // أو "signup"
 
-  function $(id) { return document.getElementById(id); }
+  const $ = id => document.getElementById(id);
 
   function showMsg(text, type) {
-    var m = $("msg");
-    if (!m) { alert(text); return; }
+    const m = $("msg");
     m.textContent = text;
     m.className = "msg " + type;
   }
 
-  function init() {
-    try {
-      if (!window.supabase || !window.supabase.createClient) {
-        showMsg("تعذر تحميل مكتبة الاتصال، جارٍ إعادة المحاولة...", "error");
-        setTimeout(init, 1000);
-        return;
-      }
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      bindUI();
-      supabase.auth.getSession().then(function (res) {
-        if (res.data && res.data.session) showLoggedIn();
-      }).catch(function () {});
-    } catch (e) {
-      showMsg("خطأ تهيئة: " + e.message, "error");
-    }
-  }
-
-  function bindUI() {
-    $("tabLogin").onclick = function () { setMode("login"); };
-    $("tabSignup").onclick = function () { setMode("signup"); };
-
-    $("authForm").onsubmit = async function (e) {
-      e.preventDefault();
-      var email = $("email").value.trim();
-      var password = $("password").value;
-      $("submitBtn").disabled = true;
-
-      try {
-        if (mode === "signup") {
-          var name = $("name").value.trim() || email.split("@")[0];
-          var res = await supabase.auth.signUp({
-            email: email,
-            password: password,
-            options: { data: { full_name: name } }
-          });
-          if (res.error) throw res.error;
-          if (res.data.session) {
-            showMsg("تم إنشاء الحساب وتسجيل الدخول بنجاح 🎉", "success");
-            setTimeout(showLoggedIn, 800);
-          } else {
-            showMsg("تم إنشاء الحساب! رجاءً فعّل حسابك من رابط التأكيد المرسل إلى بريدك.", "success");
-          }
-        } else {
-          var res2 = await supabase.auth.signInWithPassword({ email: email, password: password });
-          if (res2.error) throw res2.error;
-          showMsg("تم تسجيل الدخول بنجاح ✅", "success");
-          setTimeout(showLoggedIn, 600);
-        }
-      } catch (err) {
-        showMsg((err && err.message) || "حدث خطأ، حاول مرة أخرى", "error");
-      } finally {
-        $("submitBtn").disabled = false;
-      }
-    };
-
-    $("logoutBtn").onclick = async function () {
-      await supabase.auth.signOut();
-      $("authBox").style.display = "block";
-      $("loggedIn").style.display = "none";
-      $("email").value = "";
-      $("password").value = "";
-      setMode("login");
-      showMsg("تم تسجيل الخروج", "success");
-    };
-  }
+  $("tabLogin").onclick = () => setMode("login");
+  $("tabSignup").onclick = () => setMode("signup");
 
   function setMode(m) {
     mode = m;
@@ -269,28 +202,65 @@
     $("msg").className = "msg";
   }
 
+  $("authForm").onsubmit = async e => {
+    e.preventDefault();
+    const email = $("email").value.trim();
+    const password = $("password").value;
+    $("submitBtn").disabled = true;
+
+    try {
+      if (mode === "signup") {
+        const name = $("name").value.trim() || email.split("@")[0];
+        const { data, error } = await supabase.auth.signUp({
+          email, password,
+          options: { data: { full_name: name } }
+        });
+        if (error) throw error;
+        if (data.session) {
+          showMsg("تم إنشاء الحساب وتسجيل الدخول بنجاح 🎉", "success");
+          setTimeout(showLoggedIn, 800);
+        } else {
+          showMsg("تم إنشاء الحساب! رجاءً فعّل حسابك من رابط التأكيد المرسل إلى بريدك الإلكتروني.", "success");
+        }
+      } else {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        showMsg("تم تسجيل الدخول بنجاح ✅", "success");
+        setTimeout(showLoggedIn, 600);
+      }
+    } catch (err) {
+      showMsg(err.message || "حدث خطأ، حاول مرة أخرى", "error");
+    } finally {
+      $("submitBtn").disabled = false;
+    }
+  };
+
   function showLoggedIn() {
-    supabase.auth.getUser().then(function (res) {
-      var user = res.data && res.data.user;
-      if (!user) return;
-      var name = (user.user_metadata && user.user_metadata.full_name) || user.email.split("@")[0];
+    const user = supabase.auth.getUser ? null : null;
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) return;
+      const name = data.user.user_metadata?.full_name || data.user.email.split("@")[0];
       $("welcomeName").textContent = "أهلاً، " + name;
-      $("welcomeEmail").textContent = user.email;
+      $("welcomeEmail").textContent = data.user.email;
       $("authBox").style.display = "none";
       $("loggedIn").style.display = "block";
     });
   }
 
-  window.addEventListener("error", function (e) {
-    if (e.message) showMsg("خطأ: " + e.message, "error");
-  });
+  $("logoutBtn").onclick = async () => {
+    await supabase.auth.signOut();
+    $("authBox").style.display = "block";
+    $("loggedIn").style.display = "none";
+    $("email").value = "";
+    $("password").value = "";
+    setMode("login");
+    showMsg("تم تسجيل الخروج", "success");
+  };
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
-})();
+  // عند فتح الصفحة: تحقق إن كان المستخدم مسجلاً
+  supabase.auth.getSession().then(({ data }) => {
+    if (data.session) showLoggedIn();
+  });
 </script>
 </body>
 </html>
