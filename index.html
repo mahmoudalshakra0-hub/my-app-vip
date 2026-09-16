@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دليل طيبة الإمام السياحي | Teebat Al-Imam Tourist Guide</title>
+<meta name="description" content="دليلك السياحي الشامل لمدينة طيبة الإمام في محافظة حماة، سوريا: المعالم، الأسواق، المأكولات، الخدمات والخريطة.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hero" id="home">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>طيبة الإمام</h1>
+    <p class="subtitle">دليلك السياحي الشامل لمدينة طيبة الإمام — محافظة حماة، سوريا</p>
+    <div class="hero-buttons">
+      <a href="#attractions" class="btn btn-primary">استكشف المعالم</a>
+      <a href="#map" class="btn btn-outline">الموقع على الخريطة</a>
+    </div>
+  </div>
+  <nav id="navbar">
+    <div class="nav-container">
+      <span class="logo">🏛️ طيبة الإمام</span>
+      <ul class="nav-links">
+        <li><a href="#home">الرئيسية</a></li>
+        <li><a href="#about">عن المدينة</a></li>
+        <li><a href="#attractions">المعالم</a></li>
+        <li><a href="#food">المطبخ المحلي</a></li>
+        <li><a href="#markets">الأسواق</a></li>
+        <li><a href="#services">خدمات المسافر</a></li>
+        <li><a href="#map">الخريطة</a></li>
+      </ul>
+      <button class="menu-toggle" id="menuToggle" aria-label="القائمة">☰</button>
+    </div>
+  </nav>
+</header>
+
+<section id="about" class="section">
+  <h2 class="section-title">عن المدينة</h2>
+  <div class="about-grid">
+    <div class="about-text">
+      <p><strong>طيبة الإمام</strong> مدينة سورية تابعة لمحافظة حماة، تقع على الضفة الشرقية لنهر العاصمي (أراضي سهلية خصبة)، شمال مدينة حماة بنحو 20 كم. تشتهر بزراعة القطن والقمح والخضروات والزيتون، ويجمع مجتمعها بين طابع الريف الزراعي والنسيج العمراني الحديث.</p>
+      <p>تتميز المدينة بموقع قريب من أهم المعالم السياحية في منطقة حماة: قلعة حماة، النواعير التاريخية على نهر العاصي، وقلعة أفاميا (قلاع المسلم) الأثرية على بعد دقائق إلى الغرب منها.</p>
+      <div class="info-cards">
+        <div class="info-card"><span class="info-num">≈ 30 ألف</span><span class="info-label">نسمة (تقديري)</span></div>
+        <div class="info-card"><span class="info-num">20 كم</span><span class="info-label">شمال مدينة حماة</span></div>
+        <div class="info-card"><span class="info-num">250 م</span><span class="info-label">ارتفاع عن سطح البحر</span></div>
+      </div>
+    </div>
+    <div class="about-image">🌾</div>
+  </div>
+</section>
+
+<section id="attractions" class="section alt">
+  <h2 class="section-title">أبرز المعالم القريبة</h2>
+  <div class="cards-grid" id="attractionsGrid">
+    <!-- filled by data.js -->
+  </div>
+</section>
+
+<section id="food" class="section">
+  <h2 class="section-title">المطبخ المحلي</h2>
+  <p class="section-desc">مطبخ المنطقة جزء من مطبخ حماة الشهير — إليك أشهر الأطباق التي يجب تجربتها:</p>
+  <div class="cards-grid" id="foodGrid"></div>
+</section>
+
+<section id="markets" class="section alt">
+  <h2 class="section-title">الأسواق والتسوق</h2>
+  <div class="cards-grid" id="marketsGrid"></div>
+</section>
+
+<section id="services" class="section">
+  <h2 class="section-title">خدمات المسافر</h2>
+  <div class="cards-grid" id="servicesGrid"></div>
+</section>
+
+<section id="map" class="section alt">
+  <h2 class="section-title">الموقع والخريطة</h2>
+  <p class="section-desc">إحداثيات طيبة الإمام تقريباً: 35.17° شمالاً، 36.70° شرقاً</p>
+  <div class="map-wrap">
+    <iframe
+      src="https://www.openstreetmap.org/export/embed.html?bbox=36.63%2C35.12%2C36.78%2C35.23&layer=mapnik&marker=35.175%2C36.705"
+      style="border:0" loading="lazy" title="خريطة طيبة الإمام"></iframe>
+  </div>
+</section>
+
+<footer>
+  <p>دليل طيبة الإمام السياحي — مشروع مجتمعي © 2026</p>
+  <p class="footer-note">المعلومات تقديرية لأغراض إرشادية، يُنصح بالتحقق قبل التخطيط للرحلة.</p>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
