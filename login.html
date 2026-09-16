@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول | دليل طيبة الإمام السياحي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0e6b4f 0%, #134e39 55%, #07281d 100%);
+    padding: 20px;
+  }
+  .auth-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    width: 100%;
+    max-width: 420px;
+    padding: 36px 32px;
+  }
+  .auth-card h1 {
+    text-align: center;
+    color: var(--primary-dark);
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+  }
+  .auth-card .sub {
+    text-align: center;
+    color: var(--muted);
+    font-size: .9rem;
+    margin-bottom: 24px;
+  }
+  .tabs {
+    display: flex;
+    background: #f1ede2;
+    border-radius: 50px;
+    padding: 5px;
+    margin-bottom: 24px;
+  }
+  .tabs button {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 10px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: .95rem;
+    border-radius: 50px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all .2s;
+  }
+  .tabs button.active {
+    background: var(--primary);
+    color: #fff;
+  }
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block;
+    font-weight: 600;
+    font-size: .9rem;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .field input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #e0dbcd;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color .2s;
+  }
+  .field input:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+  .auth-btn {
+    width: 100%;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 13px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .auth-btn:hover { background: var(--primary-dark); }
+  .auth-btn:disabled { background: #9bb3aa; cursor: not-allowed; }
+  .msg {
+    display: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: .9rem;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .msg.error { display: block; background: #fdecec; color: #b33a3a; }
+  .msg.success { display: block; background: #e8f6ee; color: #1c7a4f; }
+  .back-home {
+    display: block;
+    text-align: center;
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: .85rem;
+    text-decoration: none;
+  }
+  .back-home:hover { color: var(--primary); }
+  /* حالة المستخدم المسجل */
+  #loggedIn { display: none; text-align: center; }
+  #loggedIn .avatar {
+    width: 80px; height: 80px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.2rem;
+    margin: 0 auto 14px;
+  }
+  #loggedIn h2 { color: var(--primary-dark); margin-bottom: 4px; }
+  #loggedIn p { color: var(--muted); margin-bottom: 22px; }
+</style>
+</head>
+<body>
+
+<div class="auth-page">
+  <div class="auth-card">
+    <!-- نموذج الدخول / التسجيل -->
+    <div id="authBox">
+      <h1>🏛️ دليل طيبة الإمام</h1>
+      <p class="sub">سجّل دخولك لحفظ تفضيلاتك والتعليق على المعالم</p>
+
+      <div class="tabs">
+        <button id="tabLogin" class="active">تسجيل الدخول</button>
+        <button id="tabSignup">إنشاء حساب</button>
+      </div>
+
+      <div class="msg" id="msg"></div>
+
+      <form id="authForm">
+        <div class="field" id="nameField" style="display:none">
+          <label for="name">الاسم الكامل</label>
+          <input type="text" id="name" placeholder="مثال: محمود الشكرا">
+        </div>
+        <div class="field">
+          <label for="email">البريد الإلكتروني</label>
+          <input type="email" id="email" required placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label for="password">كلمة المرور</label>
+          <input type="password" id="password" required minlength="6" placeholder="6 أحرف على الأقل">
+        </div>
+        <button type="submit" class="auth-btn" id="submitBtn">تسجيل الدخول</button>
+      </form>
+    </div>
+
+    <!-- المستخدم مسجل الدخول -->
+    <div id="loggedIn">
+      <div class="avatar">👤</div>
+      <h2 id="welcomeName"></h2>
+      <p id="welcomeEmail"></p>
+      <button class="auth-btn" id="logoutBtn">تسجيل الخروج</button>
+    </div>
+
+    <a href="index.html" class="back-home">← العودة إلى الدليل السياحي</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://hpgsvoiovfsejxtwiizg.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3N2b2lvdmZzZWp4dHdpaXpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1ODA4NDYsImV4cCI6MjEwNTE1Njg0Nn0.dEvkH_lY0sKB3TEcRumAFtgmP5pHLwLl1ImY58VoAdg";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let mode = "login"; // أو "signup"
+
+  const $ = id => document.getElementById(id);
+
+  function showMsg(text, type) {
+    const m = $("msg");
+    m.textContent = text;
+    m.className = "msg " + type;
+  }
+
+  $("tabLogin").onclick = () => setMode("login");
+  $("tabSignup").onclick = () => setMode("signup");
+
+  function setMode(m) {
+    mode = m;
+    $("tabLogin").classList.toggle("active", m === "login");
+    $("tabSignup").classList.toggle("active", m === "signup");
+    $("nameField").style.display = m === "signup" ? "block" : "none";
+    $("submitBtn").textContent = m === "signup" ? "إنشاء حساب" : "تسجيل الدخول";
+    $("msg").className = "msg";
+  }
+
+  $("authForm").onsubmit = async e => {
+    e.preventDefault();
+    const email = $("email").value.trim();
+    const password = $("password").value;
+    $("submitBtn").disabled = true;
+
+    try {
+      if (mode === "signup") {
+        const name = $("name").value.trim() || email.split("@")[0];
+        const { data, error } = await supabase.auth.signUp({
+          email, password,
+          options: { data: { full_name: name } }
+        });
+        if (error) throw error;
+        if (data.session) {
+          showMsg("تم إنشاء الحساب وتسجيل الدخول بنجاح 🎉", "success");
+          setTimeout(showLoggedIn, 800);
+        } else {
+          showMsg("تم إنشاء الحساب! رجاءً فعّل حسابك من رابط التأكيد المرسل إلى بريدك الإلكتروني.", "success");
+        }
+      } else {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        showMsg("تم تسجيل الدخول بنجاح ✅", "success");
+        setTimeout(showLoggedIn, 600);
+      }
+    } catch (err) {
+      showMsg(err.message || "حدث خطأ، حاول مرة أخرى", "error");
+    } finally {
+      $("submitBtn").disabled = false;
+    }
+  };
+
+  function showLoggedIn() {
+    const user = supabase.auth.getUser ? null : null;
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) return;
+      const name = data.user.user_metadata?.full_name || data.user.email.split("@")[0];
+      $("welcomeName").textContent = "أهلاً، " + name;
+      $("welcomeEmail").textContent = data.user.email;
+      $("authBox").style.display = "none";
+      $("loggedIn").style.display = "block";
+    });
+  }
+
+  $("logoutBtn").onclick = async () => {
+    await supabase.auth.signOut();
+    $("authBox").style.display = "block";
+    $("loggedIn").style.display = "none";
+    $("email").value = "";
+    $("password").value = "";
+    setMode("login");
+    showMsg("تم تسجيل الخروج", "success");
+  };
+
+  // عند فتح الصفحة: تحقق إن كان المستخدم مسجلاً
+  supabase.auth.getSession().then(({ data }) => {
+    if (data.session) showLoggedIn();
+  });
+</script>
+</body>
+</html>
